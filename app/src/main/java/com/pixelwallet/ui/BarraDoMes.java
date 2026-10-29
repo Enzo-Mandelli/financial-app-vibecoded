@@ -22,7 +22,7 @@ public class BarraDoMes extends View {
     public BarraDoMes(Context context, AttributeSet attrs) {
         super(context, attrs);
         passado.setColor(ContextCompat.getColor(context, R.color.pw_azul));
-        hoje.setColor(ContextCompat.getColor(context, R.color.pw_amarelo));
+        hoje.setColor(ContextCompat.getColor(context, R.color.pw_destaque));
         futuro.setColor(ContextCompat.getColor(context, R.color.pw_painel));
     }
 

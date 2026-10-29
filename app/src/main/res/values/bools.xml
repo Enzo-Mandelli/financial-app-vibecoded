@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Ícones escuros na barra de status quando o fundo é claro -->
+    <bool name="status_claro">true</bool>
+</resources>

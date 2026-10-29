@@ -22,6 +22,7 @@ public final class Repositorio {
     private static final String PREFS = "pixel_wallet";
     private static final String KEY_RENDA = "renda_centavos";
     private static final String KEY_SOM = "som_ligado";
+    private static final String KEY_TEMA_ESCURO = "tema_escuro";
 
     private static Repositorio instancia;
 
@@ -61,6 +62,15 @@ public final class Repositorio {
 
     public void definirSom(boolean ligado) {
         prefs.edit().putBoolean(KEY_SOM, ligado).apply();
+    }
+
+    /** O app começa no tema escuro, independente do tema do celular. */
+    public boolean temaEscuro() {
+        return prefs.getBoolean(KEY_TEMA_ESCURO, true);
+    }
+
+    public void definirTemaEscuro(boolean escuro) {
+        prefs.edit().putBoolean(KEY_TEMA_ESCURO, escuro).apply();
     }
 
     // ---- Gastos ----

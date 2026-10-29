@@ -19,7 +19,7 @@ nunca ficar negativo, o mês fecha no azul.
 |------|-----------|
 | **Principal** | Saldo de hoje (verde/vermelho), diária, barra do mês, campo de valor e botão **REGISTRAR** |
 | **EDITAR** | Gastos do mês agrupados por dia, navega entre meses; toque num gasto para **alterar** ou **apagar** |
-| **CONFIG** | Renda mensal, contas fixas (adicionar/alterar/apagar), resumo da diária, som liga/desliga |
+| **CONFIG** | Renda mensal, contas fixas (adicionar/alterar/apagar), resumo da diária, tema escuro/claro, som liga/desliga |
 
 O campo de valor funciona como maquininha: digite `1250` e aparece `R$ 12,50`.
 
@@ -58,6 +58,7 @@ Valores são guardados em **centavos (`long`)** para não ter erro de arredondam
 
 - Fonte [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P) (SIL Open Font License, ver `FONT_LICENSE_OFL.txt`)
 - Paleta estilo PICO-8/NES
+- **Tema escuro por padrão** (mesmo se o celular estiver no claro); dá pra trocar para o claro em CONFIG
 - Botões com sombra sólida que "afundam" ao tocar
 - Caixas com borda dupla de RPG
 - Cursor em bloco amarelo

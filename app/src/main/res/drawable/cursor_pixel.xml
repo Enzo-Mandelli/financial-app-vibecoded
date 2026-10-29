@@ -2,5 +2,5 @@
 <!-- Cursor em bloco, tipo terminal antigo -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
     <size android:width="10dp" />
-    <solid android:color="@color/pw_amarelo" />
+    <solid android:color="@color/pw_destaque" />
 </shape>

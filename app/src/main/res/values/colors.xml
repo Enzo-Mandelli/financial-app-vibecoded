@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Paleta inspirada no PICO-8 / NES -->
+<!-- Tema CLARO (paleta PICO-8). O escuro, que é o padrão, fica em values-night. -->
 <resources>
-    <color name="pw_fundo">#0F0F1B</color>
-    <color name="pw_painel">#1D2B53</color>
-    <color name="pw_texto">#FFF1E8</color>
-    <color name="pw_texto_fraco">#83769C</color>
-    <color name="pw_verde">#00E436</color>
-    <color name="pw_vermelho">#FF004D</color>
-    <color name="pw_amarelo">#FFEC27</color>
-    <color name="pw_azul">#29ADFF</color>
+    <color name="pw_fundo">#FFF1E8</color>
+    <color name="pw_painel">#C2C3C7</color>
+    <color name="pw_campo">#FFFFFF</color>
+    <color name="pw_texto">#1D2B53</color>
+    <color name="pw_texto_fraco">#5F574F</color>
+    <color name="pw_verde">#008751</color>
+    <color name="pw_vermelho">#BE1250</color>
+    <color name="pw_destaque">#AB5236</color>
+    <color name="pw_azul">#065AB5</color>
+
+    <!-- Iguais nos dois temas -->
     <color name="pw_preto">#000000</color>
+    <color name="pw_texto_botao">#FFF1E8</color>
     <color name="pw_botao_primario">#065AB5</color>
     <color name="pw_botao_perigo">#BE1250</color>
     <color name="pw_botao_neutro">#5F574F</color>

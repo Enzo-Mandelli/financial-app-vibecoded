@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.pixelwallet.PixelWalletApp;
 import com.pixelwallet.R;
 import com.pixelwallet.data.DividaFixa;
 import com.pixelwallet.data.Repositorio;
@@ -36,6 +37,7 @@ public class ConfigActivity extends AppCompatActivity {
     private TextView txtSobra;
     private TextView txtDiaria;
     private Button btnSom;
+    private Button btnTema;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class ConfigActivity extends AppCompatActivity {
         txtSobra = findViewById(R.id.txtSobra);
         txtDiaria = findViewById(R.id.txtDiaria);
         btnSom = findViewById(R.id.btnSom);
+        btnTema = findViewById(R.id.btnTema);
 
         CampoDinheiro.aplicar(campoRenda);
         if (savedInstanceState == null) {
@@ -79,7 +82,15 @@ public class ConfigActivity extends AppCompatActivity {
             Chiptune.confirmar(this);
         });
 
+        btnTema.setOnClickListener(v -> {
+            repo.definirTemaEscuro(!repo.temaEscuro());
+            Chiptune.confirmar(this);
+            // Recria as telas abertas com as cores novas.
+            PixelWalletApp.aplicarTema(repo);
+        });
+
         atualizarSom();
+        btnTema.setText(repo.temaEscuro() ? "TEMA: ESCURO" : "TEMA: CLARO");
         carregarDividas();
     }
 

@@ -122,7 +122,8 @@ com.pixelwallet
 ## 5. Design 8 bits 👾
 
 - **Fonte**: Press Start 2P em tudo.
-- **Paleta** (estilo NES/Game Boy):
+- **Tema escuro por padrão**, com opção de tema claro em CONFIG (cores em `values/` = claro, `values-night/` = escuro).
+- **Paleta escura** (estilo NES/PICO-8):
   - Fundo `#0F0F1B` · Painel `#1D2B53` · Texto `#FFF1E8`
   - Positivo `#00E436` · Negativo `#FF004D` · Destaque `#FFEC27`
 - **Botões**: retângulos sem cantos arredondados, borda grossa de 4px e "sombra" sólida deslocada; ao apertar, o botão "afunda" (sombra some).
@@ -152,3 +153,4 @@ com.pixelwallet
 - [x] Só gastos por enquanto (entradas extras ficam pra depois)
 - [x] Sem categorias, só o valor
 - [x] Nome provisório: **Pixel Wallet**
+- [x] Dark mode como padrão, com opção de tema claro
