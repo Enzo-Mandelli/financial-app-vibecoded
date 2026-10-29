@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pw_fundo"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnVoltar"
+                style="@style/Pixel.Botao.Pequeno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_neutro"
+                android:text="&lt; VOLTAR" />
+
+            <TextView
+                style="@style/Pixel.Titulo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="CONFIG" />
+        </LinearLayout>
+
+        <TextView
+            style="@style/Pixel.Titulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:textSize="10sp"
+            android:text="QUANTO VOCE RECEBE POR MES?" />
+
+        <EditText
+            android:id="@+id/campoRenda"
+            style="@style/Pixel.Campo.Dinheiro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" />
+
+        <TextView
+            style="@style/Pixel.Titulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:textSize="10sp"
+            android:text="CONTAS FIXAS DO MES" />
+
+        <TextView
+            style="@style/Pixel.Texto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="ALUGUEL, INTERNET, CARTAO..."
+            android:textColor="@color/pw_texto_fraco"
+            android:textSize="7sp" />
+
+        <LinearLayout
+            android:id="@+id/listaDividas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical" />
+
+        <TextView
+            android:id="@+id/txtSemDividas"
+            style="@style/Pixel.Texto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="NENHUMA CONTA FIXA AINDA"
+            android:textColor="@color/pw_texto_fraco"
+            android:textSize="8sp" />
+
+        <Button
+            android:id="@+id/btnAdicionar"
+            style="@style/Pixel.Botao.Pequeno"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/btn_neutro"
+            android:text="+ ADICIONAR CONTA" />
+
+        <!-- Resumo -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/bg_painel"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView
+                android:id="@+id/txtFixas"
+                style="@style/Pixel.Texto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/txtSobra"
+                style="@style/Pixel.Texto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp" />
+
+            <TextView
+                android:id="@+id/txtDiaria"
+                style="@style/Pixel.Texto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/pw_amarelo" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnSom"
+            style="@style/Pixel.Botao.Pequeno"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/btn_neutro" />
+
+        <Button
+            android:id="@+id/btnSalvar"
+            style="@style/Pixel.Botao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="&gt; SALVAR" />
+    </LinearLayout>
+</ScrollView>

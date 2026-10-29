@@ -19,9 +19,9 @@ Exemplo (outubro, 31 dias):
 | Renda             | R$ 3.000,00  |
 | Dívidas fixas     | R$ 1.500,00  |
 | Sobra p/ o mês    | R$ 1.500,00  |
-| **Por dia**       | **R$ 48,39** |
+| **Por dia**       | **R$ 48,38** |
 
-### Como calcular o "saldo do dia" (decidir — ver seção 7)
+### Como calcular o "saldo do dia" — ✅ escolhido: **modo B (acumulado)**
 
 | Modo | Fórmula | Comportamento |
 |------|---------|---------------|
@@ -29,7 +29,9 @@ Exemplo (outubro, 31 dias):
 | **B. Acumulado** ⭐ | `diária × dia de hoje − total gasto no mês` | Economizou ontem → sobra hoje. Estourou ontem → tem menos hoje. **Garante fechar no positivo** se o saldo nunca ficar negativo. |
 | **C. Recalculado** | `(sobra do mês − gasto até ontem) ÷ dias restantes − gasto de hoje` | Redistribui sobra/estouro pelos dias que faltam. Mais "suave", mas o número diário muda todo dia. |
 
-Exemplo do modo B: dia 3, diária R$ 48,39 → liberado R$ 145,17. Gastou R$ 100 até agora → **saldo hoje: R$ 45,17**.
+Exemplo do modo B: dia 3 → liberado = R$ 1.500 × 3 ÷ 31 = R$ 145,16. Gastou R$ 100 até agora → **saldo hoje: R$ 45,16**.
+
+> Na implementação o liberado é `sobra × dia ÷ dias` (multiplica antes de dividir), assim no último dia do mês o liberado é exatamente a sobra, sem perder centavos no arredondamento.
 
 ---
 
@@ -44,7 +46,7 @@ Exemplo do modo B: dia 3, diária R$ 48,39 → liberado R$ 145,17. Gastou R$ 100
 │     ╔════════════════╗       │
 │     ║   R$ 45,17     ║       │  ← verde se ≥ 0, vermelho se < 0
 │     ╚════════════════╝       │
-│   DIÁRIA: R$ 48,39           │
+│   DIÁRIA: R$ 48,38           │
 │   DIA 03/31  ▓▓░░░░░░░░      │  ← barra de progresso do mês
 │                              │
 │   ┌────────────────────┐     │
@@ -89,10 +91,10 @@ Exemplo do modo B: dia 3, diária R$ 48,39 → liberado R$ 145,17. Gastou R$ 100
 | Item | Escolha |
 |------|---------|
 | Linguagem | Java 17 |
-| Plataforma | Android, minSdk 24 (Android 7+) |
+| Plataforma | Android, minSdk 26 (Android 8+) |
 | IDE / build | Android Studio + Gradle |
-| Banco local | Room (SQLite) |
-| Preferências (renda) | SharedPreferences ou tabela no Room |
+| Banco local | SQLite (`SQLiteOpenHelper`, sem bibliotecas extras) |
+| Preferências (renda, som) | SharedPreferences |
 | UI | XML layouts + Views (nada de Compose, que é Kotlin) |
 | Fonte | [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P) (licença OFL, livre) |
 
@@ -134,7 +136,7 @@ com.pixelwallet
 
 1. **Setup** — projeto Android, fonte, cores, tema.
 2. **Lógica** — `CalculadoraSaldo` + testes unitários.
-3. **Banco** — Room com Gasto, DividaFixa, Config.
+3. **Banco** — SQLite com Gasto e DividaFixa; renda no SharedPreferences.
 4. **Tela de config** — renda + dívidas fixas.
 5. **Tela principal** — saldo, campo com máscara, botão registrar.
 6. **Tela de editar** — listar, alterar, apagar.
@@ -143,10 +145,10 @@ com.pixelwallet
 
 ---
 
-## 7. Decisões em aberto
+## 7. Decisões
 
-- [ ] Modo de cálculo do saldo: **A**, **B** ou **C**? (sugestão: **B**)
-- [ ] Renda e dívidas fixas iguais todo mês, ou dá pra mudar mês a mês?
-- [ ] Só gastos, ou também registrar **entradas extras** (um freela, um Pix recebido)?
-- [ ] Categorias nos gastos (comida, transporte…) ou só valor mesmo?
-- [ ] Nome do app — "Pixel Wallet" é provisório.
+- [x] Modo de cálculo do saldo: **B (acumulado)**
+- [x] Renda e dívidas fixas: valem para todo mês; dá pra mudar a qualquer momento em CONFIG
+- [x] Só gastos por enquanto (entradas extras ficam pra depois)
+- [x] Sem categorias, só o valor
+- [x] Nome provisório: **Pixel Wallet**

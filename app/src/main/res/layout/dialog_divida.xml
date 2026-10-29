@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/campoNome"
+        style="@style/Pixel.Campo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="NOME (EX: ALUGUEL)"
+        android:imeOptions="actionNext"
+        android:inputType="textCapCharacters"
+        android:maxLength="20"
+        android:textSize="10sp" />
+
+    <EditText
+        android:id="@+id/campoValor"
+        style="@style/Pixel.Campo.Dinheiro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp" />
+</LinearLayout>
