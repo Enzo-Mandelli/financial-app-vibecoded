@@ -24,6 +24,13 @@ android {
         unitTests {
             // Robolectric precisa dos layouts, cores e fonte para abrir as telas nos testes
             includeAndroidResources = true
+            all {
+                // Mostra o esperado x obtido no log do GitHub quando um teste falha
+                testLogging {
+                    events 'failed'
+                    exceptionFormat 'full'
+                }
+            }
         }
     }
 

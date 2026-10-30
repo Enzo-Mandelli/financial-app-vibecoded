@@ -1,6 +1,7 @@
 package com.pixelwallet.util;
 
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
@@ -48,7 +49,12 @@ public final class CampoDinheiro implements TextWatcher {
         String formatado = centavos == 0 ? "" : Dinheiro.formatar(centavos);
         if (!formatado.contentEquals(s)) {
             formatando = true;
+            // Com inputType="number" o Android põe um filtro de "só dígitos" no texto,
+            // que arrancaria o "R$", a vírgula e os pontos. Desliga só durante a troca.
+            InputFilter[] filtros = s.getFilters();
+            s.setFilters(new InputFilter[0]);
             s.replace(0, s.length(), formatado);
+            s.setFilters(filtros);
             formatando = false;
         }
         campo.setSelection(s.length());
