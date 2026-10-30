@@ -108,6 +108,15 @@
             android:layout_marginTop="8dp" />
 
         <TextView
+            android:id="@+id/txtGanhoMes"
+            style="@style/Pixel.Texto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/pw_verde"
+            android:visibility="gone" />
+
+        <TextView
             android:id="@+id/txtDia"
             style="@style/Pixel.Texto"
             android:layout_width="match_parent"
@@ -136,7 +145,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="&gt; REGISTRAR" />
+            android:text="&gt; REGISTRAR GASTO" />
+
+        <!-- Mesmo campo: dinheiro que entrou fora da renda (Pix, freela...) -->
+        <Button
+            android:id="@+id/btnGanho"
+            style="@style/Pixel.Botao.Pequeno"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/btn_ganho"
+            android:text="+ GANHO EXTRA" />
 
         <TextView
             style="@style/Pixel.Titulo"
@@ -144,7 +163,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:textSize="10sp"
-            android:text="GASTOS DE HOJE" />
+            android:text="HOJE" />
 
         <LinearLayout
             android:id="@+id/listaHoje"
@@ -159,7 +178,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="NENHUM GASTO HOJE. BOA!"
+            android:text="NADA REGISTRADO HOJE"
             android:textColor="@color/pw_texto_fraco"
             android:textSize="8sp" />
     </LinearLayout>

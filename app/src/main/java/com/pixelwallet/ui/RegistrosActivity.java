@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pixelwallet.R;
-import com.pixelwallet.data.Gasto;
+import com.pixelwallet.data.Registro;
 import com.pixelwallet.data.Repositorio;
 import com.pixelwallet.util.CampoDinheiro;
 import com.pixelwallet.util.Chiptune;
@@ -26,7 +26,7 @@ import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Lista os gastos do mês agrupados por dia; tocar num gasto permite alterar ou apagar. */
+/** Lista gastos e ganhos do mês agrupados por dia; tocar num item permite alterar ou apagar. */
 public class RegistrosActivity extends AppCompatActivity {
 
     private Repositorio repo;
@@ -67,31 +67,37 @@ public class RegistrosActivity extends AppCompatActivity {
     }
 
     private void carregar() {
-        List<Gasto> gastos = repo.gastosDoMes(mes);
+        List<Registro> registros = repo.registrosDoMes(mes);
         List<Object> itens = new ArrayList<>();
         LocalDate diaAtual = null;
-        long total = 0;
-        for (Gasto g : gastos) {
+        long gastos = 0;
+        long ganhos = 0;
+        for (Registro g : registros) {
             LocalDate dia = Datas.deMillis(g.dataHora).toLocalDate();
             if (!dia.equals(diaAtual)) {
                 itens.add(dia);
                 diaAtual = dia;
             }
             itens.add(g);
-            total += g.valorCentavos;
+            if (g.ganho) {
+                ganhos += g.valorCentavos;
+            } else {
+                gastos += g.valorCentavos;
+            }
         }
         adaptador.definir(itens);
 
         txtMes.setText(Datas.mes(mes));
-        txtTotal.setText("TOTAL: " + Dinheiro.formatar(total));
-        txtVazio.setVisibility(gastos.isEmpty() ? View.VISIBLE : View.GONE);
+        txtTotal.setText("GASTOS: " + Dinheiro.formatar(gastos)
+                + (ganhos > 0 ? "\nEXTRAS: " + Dinheiro.formatar(ganhos) : ""));
+        txtVazio.setVisibility(registros.isEmpty() ? View.VISIBLE : View.GONE);
         // Não tem gasto no futuro.
         btnProximo.setVisibility(mes.isBefore(YearMonth.now()) ? View.VISIBLE : View.INVISIBLE);
     }
 
-    private void abrirOpcoes(Gasto g) {
+    private void abrirOpcoes(Registro g) {
         new PixelDialog(this)
-                .titulo(Dinheiro.formatar(g.valorCentavos))
+                .titulo((g.ganho ? "GANHO " : "GASTO ") + Dinheiro.formatar(g.valorCentavos))
                 .mensagem(Datas.dia(Datas.deMillis(g.dataHora).toLocalDate())
                         + " AS " + Datas.hora(g.dataHora))
                 .botao("ALTERAR VALOR", R.drawable.btn_primario, () -> alterar(g))
@@ -100,7 +106,7 @@ public class RegistrosActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void alterar(Gasto g) {
+    private void alterar(Registro g) {
         EditText campo = (EditText) LayoutInflater.from(this)
                 .inflate(R.layout.campo_dinheiro, null, false);
         CampoDinheiro.aplicar(campo);
@@ -117,7 +123,7 @@ public class RegistrosActivity extends AppCompatActivity {
                         Pixel.tremer(campo);
                         return false;
                     }
-                    repo.alterarGasto(g.id, valor);
+                    repo.alterarRegistro(g.id, valor);
                     Chiptune.confirmar(this);
                     carregar();
                     return true;
@@ -126,12 +132,12 @@ public class RegistrosActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void confirmarApagar(Gasto g) {
+    private void confirmarApagar(Registro g) {
         new PixelDialog(this)
                 .titulo("APAGAR?")
                 .mensagem("TEM CERTEZA QUE QUER APAGAR " + Dinheiro.formatar(g.valorCentavos) + "?")
                 .botao("SIM, APAGAR", R.drawable.btn_perigo, () -> {
-                    repo.apagarGasto(g.id);
+                    repo.apagarRegistro(g.id);
                     Chiptune.apagar(this);
                     carregar();
                 })
@@ -178,9 +184,8 @@ public class RegistrosActivity extends AppCompatActivity {
                 ((TextView) v).setText(Datas.dia((LocalDate) item));
                 return;
             }
-            Gasto g = (Gasto) item;
-            ((TextView) v.findViewById(R.id.itemValor)).setText("- " + Dinheiro.formatar(g.valorCentavos));
-            ((TextView) v.findViewById(R.id.itemHora)).setText(Datas.hora(g.dataHora));
+            Registro g = (Registro) item;
+            ItemRegistro.preencher(v, g);
             v.setOnClickListener(x -> abrirOpcoes(g));
         }
     }

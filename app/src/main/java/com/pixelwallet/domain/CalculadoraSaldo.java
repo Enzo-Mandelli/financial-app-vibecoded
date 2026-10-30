@@ -6,10 +6,12 @@ package com.pixelwallet.domain;
  * <pre>
  * sobra do mês     = renda − dívidas fixas
  * liberado até hoje = sobra do mês × dia de hoje ÷ dias do mês
- * saldo de hoje     = liberado até hoje − total gasto no mês
+ * saldo de hoje     = liberado até hoje + ganhos extras do mês − total gasto no mês
  * </pre>
  *
  * Economizou ontem? Sobra pra hoje. Estourou ontem? Hoje tem menos.
+ * Ganho extra (alguém te mandou dinheiro) entra inteiro no saldo do dia em
+ * que chegou; o que não for gasto vai sobrando para os próximos dias.
  * Se o saldo nunca ficar negativo, o mês fecha no positivo.
  *
  * Todos os valores são em centavos. Divisões arredondam para baixo
@@ -25,7 +27,8 @@ public final class CalculadoraSaldo {
                                      int diasNoMes,
                                      int diaDeHoje,
                                      long gastoNoMesCentavos,
-                                     long gastoHojeCentavos) {
+                                     long gastoHojeCentavos,
+                                     long ganhosNoMesCentavos) {
         if (diasNoMes < 1) {
             throw new IllegalArgumentException("diasNoMes deve ser >= 1");
         }
@@ -38,10 +41,10 @@ public final class CalculadoraSaldo {
         // Multiplica antes de dividir para não acumular erro de arredondamento:
         // no último dia o liberado é exatamente a sobra do mês.
         long liberadoAteHoje = Math.floorDiv(sobraDoMes * diaDeHoje, diasNoMes);
-        long saldoHoje = liberadoAteHoje - gastoNoMesCentavos;
+        long saldoHoje = liberadoAteHoje + ganhosNoMesCentavos - gastoNoMesCentavos;
 
         return new Resultado(sobraDoMes, diaria, liberadoAteHoje, saldoHoje,
-                gastoNoMesCentavos, gastoHojeCentavos, diaDeHoje, diasNoMes);
+                gastoNoMesCentavos, gastoHojeCentavos, ganhosNoMesCentavos, diaDeHoje, diasNoMes);
     }
 
     public static final class Resultado {
@@ -51,17 +54,19 @@ public final class CalculadoraSaldo {
         public final long saldoHoje;
         public final long gastoNoMes;
         public final long gastoHoje;
+        public final long ganhosNoMes;
         public final int diaDeHoje;
         public final int diasNoMes;
 
         Resultado(long sobraDoMes, long diaria, long liberadoAteHoje, long saldoHoje,
-                  long gastoNoMes, long gastoHoje, int diaDeHoje, int diasNoMes) {
+                  long gastoNoMes, long gastoHoje, long ganhosNoMes, int diaDeHoje, int diasNoMes) {
             this.sobraDoMes = sobraDoMes;
             this.diaria = diaria;
             this.liberadoAteHoje = liberadoAteHoje;
             this.saldoHoje = saldoHoje;
             this.gastoNoMes = gastoNoMes;
             this.gastoHoje = gastoHoje;
+            this.ganhosNoMes = ganhosNoMes;
             this.diaDeHoje = diaDeHoje;
             this.diasNoMes = diasNoMes;
         }

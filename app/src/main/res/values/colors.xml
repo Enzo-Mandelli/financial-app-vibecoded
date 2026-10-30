@@ -17,4 +17,5 @@
     <color name="pw_botao_primario">#065AB5</color>
     <color name="pw_botao_perigo">#BE1250</color>
     <color name="pw_botao_neutro">#5F574F</color>
+    <color name="pw_botao_ganho">#008751</color>
 </resources>

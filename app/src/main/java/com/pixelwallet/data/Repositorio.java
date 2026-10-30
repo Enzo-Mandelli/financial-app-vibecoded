@@ -73,59 +73,65 @@ public final class Repositorio {
         prefs.edit().putBoolean(KEY_TEMA_ESCURO, escuro).apply();
     }
 
-    // ---- Gastos ----
+    // ---- Gastos e ganhos extras ----
 
-    public void registrarGasto(long valorCentavos) {
+    public void registrar(long valorCentavos, boolean ganho) {
         ContentValues cv = new ContentValues();
         cv.put("valor_centavos", valorCentavos);
         cv.put("data_hora", System.currentTimeMillis());
+        cv.put("ganho", ganho ? 1 : 0);
         banco.getWritableDatabase().insert("gasto", null, cv);
     }
 
-    public void alterarGasto(long id, long valorCentavos) {
+    public void alterarRegistro(long id, long valorCentavos) {
         ContentValues cv = new ContentValues();
         cv.put("valor_centavos", valorCentavos);
         banco.getWritableDatabase().update("gasto", cv, "id = ?", args(id));
     }
 
-    public void apagarGasto(long id) {
+    public void apagarRegistro(long id) {
         banco.getWritableDatabase().delete("gasto", "id = ?", args(id));
     }
 
-    /** Gastos do mês, do mais recente para o mais antigo. */
-    public List<Gasto> gastosDoMes(YearMonth mes) {
-        return gastosEntre(inicio(mes.atDay(1)), inicio(mes.plusMonths(1).atDay(1)));
+    /** Gastos e ganhos do mês, do mais recente para o mais antigo. */
+    public List<Registro> registrosDoMes(YearMonth mes) {
+        return registrosEntre(inicio(mes.atDay(1)), inicio(mes.plusMonths(1).atDay(1)));
     }
 
-    public List<Gasto> gastosDoDia(LocalDate dia) {
-        return gastosEntre(inicio(dia), inicio(dia.plusDays(1)));
+    public List<Registro> registrosDoDia(LocalDate dia) {
+        return registrosEntre(inicio(dia), inicio(dia.plusDays(1)));
     }
 
     public long totalGastoNoMes(YearMonth mes) {
-        return somaEntre(inicio(mes.atDay(1)), inicio(mes.plusMonths(1).atDay(1)));
+        return somaEntre(inicio(mes.atDay(1)), inicio(mes.plusMonths(1).atDay(1)), false);
     }
 
     public long totalGastoNoDia(LocalDate dia) {
-        return somaEntre(inicio(dia), inicio(dia.plusDays(1)));
+        return somaEntre(inicio(dia), inicio(dia.plusDays(1)), false);
     }
 
-    private List<Gasto> gastosEntre(long inicio, long fim) {
-        List<Gasto> lista = new ArrayList<>();
+    public long totalGanhoNoMes(YearMonth mes) {
+        return somaEntre(inicio(mes.atDay(1)), inicio(mes.plusMonths(1).atDay(1)), true);
+    }
+
+    private List<Registro> registrosEntre(long inicio, long fim) {
+        List<Registro> lista = new ArrayList<>();
         try (Cursor c = banco.getReadableDatabase().query("gasto",
-                new String[]{"id", "valor_centavos", "data_hora"},
+                new String[]{"id", "valor_centavos", "data_hora", "ganho"},
                 "data_hora >= ? AND data_hora < ?", args(inicio, fim),
                 null, null, "data_hora DESC")) {
             while (c.moveToNext()) {
-                lista.add(new Gasto(c.getLong(0), c.getLong(1), c.getLong(2)));
+                lista.add(new Registro(c.getLong(0), c.getLong(1), c.getLong(2), c.getInt(3) == 1));
             }
         }
         return lista;
     }
 
-    private long somaEntre(long inicio, long fim) {
+    private long somaEntre(long inicio, long fim, boolean ganho) {
         try (Cursor c = banco.getReadableDatabase().rawQuery(
                 "SELECT COALESCE(SUM(valor_centavos), 0) FROM gasto"
-                        + " WHERE data_hora >= ? AND data_hora < ?", args(inicio, fim))) {
+                        + " WHERE data_hora >= ? AND data_hora < ? AND ganho = ?",
+                args(inicio, fim, ganho ? 1 : 0))) {
             return c.moveToFirst() ? c.getLong(0) : 0;
         }
     }
@@ -185,15 +191,17 @@ public final class Repositorio {
 
     private static final class Banco extends SQLiteOpenHelper {
         Banco(Context context) {
-            super(context, "pixel_wallet.db", null, 1);
+            super(context, "pixel_wallet.db", null, 2);
         }
 
         @Override
         public void onCreate(SQLiteDatabase db) {
+            // A tabela se chama "gasto" por histórico, mas guarda gastos e ganhos extras.
             db.execSQL("CREATE TABLE gasto ("
                     + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                     + "valor_centavos INTEGER NOT NULL,"
-                    + "data_hora INTEGER NOT NULL)");
+                    + "data_hora INTEGER NOT NULL,"
+                    + "ganho INTEGER NOT NULL DEFAULT 0)");
             db.execSQL("CREATE INDEX idx_gasto_data ON gasto(data_hora)");
             db.execSQL("CREATE TABLE divida_fixa ("
                     + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -203,7 +211,10 @@ public final class Repositorio {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            // Só existe a versão 1 por enquanto.
+            if (oldVersion < 2) {
+                // v2: ganhos extras. Tudo que já existia era gasto.
+                db.execSQL("ALTER TABLE gasto ADD COLUMN ganho INTEGER NOT NULL DEFAULT 0");
+            }
         }
     }
 }

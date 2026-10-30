@@ -75,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="TOQUE NUM GASTO PARA ALTERAR OU APAGAR"
+        android:text="TOQUE NUM ITEM PARA ALTERAR OU APAGAR"
         android:textColor="@color/pw_texto_fraco"
         android:textSize="7sp" />
 

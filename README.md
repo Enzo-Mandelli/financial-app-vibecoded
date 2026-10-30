@@ -7,18 +7,20 @@ Ele responde uma pergunta: **quanto eu posso gastar hoje e ainda fechar o mês n
 ```
 sobra do mês      = renda − contas fixas
 liberado até hoje = sobra do mês × dia de hoje ÷ dias do mês
-SALDO DE HOJE     = liberado até hoje − tudo que já gastei no mês
+SALDO DE HOJE     = liberado até hoje + ganhos extras do mês − tudo que já gastei no mês
 ```
 
-Gastou menos ontem? Sobra pra hoje. Estourou? Hoje tem menos. Se o saldo
-nunca ficar negativo, o mês fecha no azul.
+Gastou menos ontem? Sobra pra hoje. Estourou? Hoje tem menos. Alguém te
+mandou um Pix? Registre como **ganho extra**: ele entra inteiro no saldo do
+dia e o que não for gasto vai sobrando. Se o saldo nunca ficar negativo, o
+mês fecha no azul.
 
 ## Telas
 
 | Tela | O que faz |
 |------|-----------|
-| **Principal** | Saldo de hoje (verde/vermelho), diária, barra do mês, campo de valor e botão **REGISTRAR** |
-| **EDITAR** | Gastos do mês agrupados por dia, navega entre meses; toque num gasto para **alterar** ou **apagar** |
+| **Principal** | Saldo de hoje (verde/vermelho), diária, barra do mês, campo de valor e botões **REGISTRAR GASTO** e **+ GANHO EXTRA** |
+| **EDITAR** | Gastos e ganhos do mês agrupados por dia, navega entre meses; toque num item para **alterar** ou **apagar** |
 | **CONFIG** | Renda mensal, contas fixas (adicionar/alterar/apagar), resumo da diária, tema escuro/claro, som liga/desliga |
 
 O campo de valor funciona como maquininha: digite `1250` e aparece `R$ 12,50`.
@@ -43,7 +45,7 @@ Testes da lógica de cálculo e formatação:
 ```
 app/src/main/java/com/pixelwallet/
 ├── domain/CalculadoraSaldo.java   ← a conta do saldo (lógica pura, testada)
-├── data/Repositorio.java          ← SQLite (gastos, contas fixas) + SharedPreferences (renda, som)
+├── data/Repositorio.java          ← SQLite (gastos, ganhos extras, contas fixas) + SharedPreferences (renda, som)
 ├── ui/MainActivity.java           ← tela principal
 ├── ui/RegistrosActivity.java      ← editar/apagar gastos
 ├── ui/ConfigActivity.java         ← renda e contas fixas

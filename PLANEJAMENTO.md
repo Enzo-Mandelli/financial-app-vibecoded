@@ -150,7 +150,7 @@ com.pixelwallet
 
 - [x] Modo de cálculo do saldo: **B (acumulado)**
 - [x] Renda e dívidas fixas: valem para todo mês; dá pra mudar a qualquer momento em CONFIG
-- [x] Só gastos por enquanto (entradas extras ficam pra depois)
+- [x] Ganhos extras (Pix recebido, freela...): botão **+ GANHO EXTRA**; o valor entra inteiro no saldo do dia e a sobra acumula
 - [x] Sem categorias, só o valor
 - [x] Nome provisório: **Pixel Wallet**
 - [x] Dark mode como padrão, com opção de tema claro

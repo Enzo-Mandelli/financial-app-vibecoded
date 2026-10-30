@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.pixelwallet.R;
-import com.pixelwallet.data.Gasto;
+import com.pixelwallet.data.Registro;
 import com.pixelwallet.data.Repositorio;
 import com.pixelwallet.domain.CalculadoraSaldo;
 import com.pixelwallet.util.CampoDinheiro;
@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView txtDiaria;
     private TextView txtDia;
     private TextView txtGastoMes;
+    private TextView txtGanhoMes;
     private BarraDoMes barraMes;
     private EditText campoValor;
     private LinearLayout listaHoje;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         txtDiaria = findViewById(R.id.txtDiaria);
         txtDia = findViewById(R.id.txtDia);
         txtGastoMes = findViewById(R.id.txtGastoMes);
+        txtGanhoMes = findViewById(R.id.txtGanhoMes);
         barraMes = findViewById(R.id.barraMes);
         campoValor = findViewById(R.id.campoValor);
         listaHoje = findViewById(R.id.listaHoje);
@@ -70,13 +72,14 @@ public class MainActivity extends AppCompatActivity {
         CampoDinheiro.aplicar(campoValor);
         campoValor.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                registrar();
+                registrar(false);
                 return true;
             }
             return false;
         });
 
-        findViewById(R.id.btnRegistrar).setOnClickListener(v -> registrar());
+        findViewById(R.id.btnRegistrar).setOnClickListener(v -> registrar(false));
+        findViewById(R.id.btnGanho).setOnClickListener(v -> registrar(true));
         findViewById(R.id.btnEditar).setOnClickListener(v ->
                 startActivity(new Intent(this, RegistrosActivity.class)));
         findViewById(R.id.btnConfig).setOnClickListener(v ->
@@ -100,16 +103,21 @@ public class MainActivity extends AppCompatActivity {
         pararPulso();
     }
 
-    private void registrar() {
+    /** Registra o valor do campo como gasto ou como ganho extra. */
+    private void registrar(boolean ganho) {
         long valor = CampoDinheiro.valor(campoValor);
         if (valor <= 0) {
             Chiptune.erro(this);
             Pixel.tremer(campoValor);
             return;
         }
-        repo.registrarGasto(valor);
+        repo.registrar(valor, ganho);
         campoValor.setText("");
-        Chiptune.moeda(this);
+        if (ganho) {
+            Chiptune.ganho(this);
+        } else {
+            Chiptune.moeda(this);
+        }
         atualizar(true);
     }
 
@@ -123,7 +131,8 @@ public class MainActivity extends AppCompatActivity {
                 mes.lengthOfMonth(),
                 hoje.getDayOfMonth(),
                 repo.totalGastoNoMes(mes),
-                repo.totalGastoNoDia(hoje));
+                repo.totalGastoNoDia(hoje),
+                repo.totalGanhoNoMes(mes));
 
         txtSaldo.setText(Dinheiro.formatar(r.saldoHoje));
         txtSaldo.setTextColor(ContextCompat.getColor(this,
@@ -142,12 +151,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         txtDiaria.setText("DIARIA:   " + Dinheiro.formatar(r.diaria));
-        txtGastoMes.setText("NO MES:   " + Dinheiro.formatar(r.gastoNoMes));
+        txtGastoMes.setText("GASTOS:   " + Dinheiro.formatar(r.gastoNoMes));
+        txtGanhoMes.setText("EXTRAS:   " + Dinheiro.formatar(r.ganhosNoMes));
+        txtGanhoMes.setVisibility(r.ganhosNoMes > 0 ? View.VISIBLE : View.GONE);
         txtDia.setText("DIA " + Datas.doisDigitos(r.diaDeHoje) + "/" + r.diasNoMes
                 + "  " + Datas.mes(mes));
         barraMes.definir(r.diaDeHoje, r.diasNoMes);
 
-        preencherHoje(repo.gastosDoDia(hoje));
+        preencherHoje(repo.registrosDoDia(hoje));
 
         pararPulso();
         if (animar) {
@@ -163,14 +174,13 @@ public class MainActivity extends AppCompatActivity {
         txtSaldo.setAlpha(1f);
     }
 
-    private void preencherHoje(List<Gasto> gastos) {
+    private void preencherHoje(List<Registro> registros) {
         listaHoje.removeAllViews();
-        txtVazioHoje.setVisibility(gastos.isEmpty() ? View.VISIBLE : View.GONE);
+        txtVazioHoje.setVisibility(registros.isEmpty() ? View.VISIBLE : View.GONE);
         LayoutInflater inflater = LayoutInflater.from(this);
-        for (Gasto g : gastos) {
+        for (Registro reg : registros) {
             View item = inflater.inflate(R.layout.item_gasto, listaHoje, false);
-            ((TextView) item.findViewById(R.id.itemValor)).setText("- " + Dinheiro.formatar(g.valorCentavos));
-            ((TextView) item.findViewById(R.id.itemHora)).setText(Datas.hora(g.dataHora));
+            ItemRegistro.preencher(item, reg);
             listaHoje.addView(item);
         }
     }

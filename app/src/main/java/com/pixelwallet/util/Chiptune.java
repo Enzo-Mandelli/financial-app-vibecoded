@@ -24,6 +24,11 @@ public final class Chiptune {
         tocar(ctx, new int[]{988, 1319}, new int[]{70, 260});
     }
 
+    /** Jingle de "1-UP": entrou dinheiro extra. */
+    public static void ganho(Context ctx) {
+        tocar(ctx, new int[]{659, 784, 1319, 1047, 1175, 1568}, new int[]{70, 70, 70, 70, 70, 200});
+    }
+
     /** Tom descendo: apagou algo. */
     public static void apagar(Context ctx) {
         tocar(ctx, new int[]{523, 392, 262}, new int[]{70, 70, 160});
